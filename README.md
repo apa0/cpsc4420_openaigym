@@ -24,3 +24,21 @@ env = gym.make("Taxi-v4", is_rainy=False, fickle_passenger=False)
 ```
 
 Reference: [Gymnasium Taxi documentation](https://gymnasium.farama.org/environments/toy_text/taxi/).
+
+## Python setup
+
+Use Python 3.11. From the repository directory:
+
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+Dependencies include Gymnasium and Pygame for Taxi and rendering, NumPy for the Q-table, Matplotlib for experiment plots, and MoviePy with an FFmpeg backend for MP4 recording through Gymnasium's `RecordVideo` wrapper.
+
+Activate the environment with `source .venv/bin/activate` in each new terminal. In your editor, select `.venv/bin/python` as the Python interpreter. Run the script with:
+
+```bash
+python src/taxi_qlearning.py
+```
