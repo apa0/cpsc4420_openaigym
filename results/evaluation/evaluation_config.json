@@ -1,0 +1,48 @@
+{
+  "models": [
+    {
+      "agent": "baseline",
+      "model": "results/baseline.npz",
+      "sha256": "eb37276817dbeacb8a377215c1de25ac18cb70c45aec52a0f9d0d8c8cc4af801",
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.1,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.995,
+        "epsilon_min": 0.01,
+        "seed": 42
+      }
+    },
+    {
+      "agent": "combined_candidate",
+      "model": "results/combined_candidate.npz",
+      "sha256": "da3d87c878ff4c4acb2ea57515d8eed8e9af23a702025347d220b7f7f2ad4112",
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 42
+      }
+    }
+  ],
+  "environment": "Taxi-v4",
+  "environment_settings": {
+    "is_rainy": false,
+    "fickle_passenger": false
+  },
+  "episodes_per_agent": 100,
+  "first_episode_seed": 10000,
+  "episode_seed_rule": "seed + zero-based episode index; reset independently every episode",
+  "tie_breaking": "Random choice among highest-valued actions; RNG reset to episode seed",
+  "epsilon": 0.0,
+  "q_updates": false,
+  "reward_std_ddof": 0,
+  "baseline": "baseline",
+  "selected_agent": "combined_candidate"
+}

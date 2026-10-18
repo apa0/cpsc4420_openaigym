@@ -1,0 +1,10 @@
+{
+  "environment": "Taxi-v4",
+  "alpha": 0.1,
+  "gamma": 0.99,
+  "epsilon": 1.0,
+  "episodes": 10000,
+  "epsilon_decay": 0.999,
+  "epsilon_min": 0.01,
+  "seed": 42
+}

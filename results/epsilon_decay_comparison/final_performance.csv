@@ -1,0 +1,4 @@
+epsilon_decay,first_episode,last_episode,episodes,mean_reward,reward_std,success_rate,mean_steps,mean_illegal_pickups,mean_illegal_dropoffs,mean_illegal_actions
+0.99,9901,10000,100,7.31,3.445852579551249,1.0,13.15,0.05,0.01,0.06
+0.995,9901,10000,100,7.09,3.566777256852466,1.0,13.64,0.01,0.02,0.03
+0.999,9901,10000,100,8.2,3.0,1.0,12.53,0.03,0.0,0.03

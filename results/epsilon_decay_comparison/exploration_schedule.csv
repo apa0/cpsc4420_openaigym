@@ -1,0 +1,4 @@
+epsilon_decay,initial_epsilon,epsilon_min,completed_episodes_to_floor,first_training_episode_at_floor
+0.99,1.0,0.01,459,460
+0.995,1.0,0.01,919,920
+0.999,1.0,0.01,4603,4604
