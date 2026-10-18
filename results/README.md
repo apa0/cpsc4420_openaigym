@@ -1,8 +1,8 @@
-# Paper results
+# Assignment results
 
 All commands run from the repository root. The `.npz` files contain saved Q-tables and training histories; the adjacent folders contain plots, CSV tables, and settings.
 
-| Paper topic | Results to open | Command that generated them |
+| Assignment topic | Results to open | Command that generated them |
 | --- | --- | --- |
 | Baseline training | [Reward curve](baseline/reward_curve.png), [training metrics](baseline/training_metrics.png), [summary](baseline/summary.csv) | `python -m src.taxi_qlearning --output results/baseline.npz` |
 | Learning rate (alpha) | [Comparison plots and tables](alpha_comparison/) | `python -m src.tools.compare_training alpha results/baseline.npz results/alpha_0.5.npz results/alpha_0.9.npz` |

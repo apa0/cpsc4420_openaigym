@@ -27,10 +27,10 @@ Each training run saves a `.npz` archive and plots and tables in a folder with t
 python -m src.tools.evaluate_agent results/combined_candidate.npz --baseline results/baseline.npz
 ```
 
-The saved results used in the paper, including hyperparameter comparisons and rain experiments, are indexed in [`results/README.md`](results/README.md). Run any supporting command with `--help` for its options.
+The saved assignment results, including hyperparameter comparisons and rain experiments, are indexed in [`results/README.md`](results/README.md). Run any supporting command with `--help` for its options.
 
 ## Final agent video
 
-[Watch the trained agent (MP4)](results/combined_candidate/videos/taxi-episode-0.mp4)
+[![The trained Taxi agent completing a dry run](results/combined_candidate/videos/demo.gif)](results/combined_candidate/videos/taxi-episode-0.mp4)
 
-For recordings of this same agent with movement noise, see the [rainy videos folder](results/combined_candidate/videos/rain_0.25/).
+Click the preview to watch the MP4. For recordings of this same agent with movement noise, see the [rainy videos folder](results/combined_candidate/videos/rain_0.25/).
