@@ -1,0 +1,7 @@
+rain_noise,policy,training_runs,evaluation_episodes_per_run,mean_reward_across_runs,std_reward_across_runs,min_mean_reward,max_mean_reward,mean_success_rate_across_runs,std_success_rate_across_runs,min_success_rate,max_success_rate,mean_steps_across_runs,mean_illegal_actions_across_runs
+0.0,trained_at_noise_level,1,500,7.714,0.0,7.714,7.714,1.0,0.0,1.0,1.0,13.286,0.0
+0.0,original_dry_policy,1,500,7.714,0.0,7.714,7.714,1.0,0.0,1.0,1.0,13.286,0.0
+0.1,trained_at_noise_level,3,500,-21.293333333333333,23.953855834360642,-46.646,0.96,0.902,0.13340164916521835,0.748,0.982,34.30133333333333,0.6593333333333333
+0.1,original_dry_policy,1,500,5.892,0.0,5.892,5.892,1.0,0.0,1.0,1.0,15.108,0.0
+0.25,trained_at_noise_level,3,500,-13.214,5.479265279213994,-17.6,-7.072,0.9460000000000001,0.031176914536239754,0.91,0.964,31.88,0.13333333333333333
+0.25,original_dry_policy,1,500,1.968,0.0,1.968,1.968,1.0,0.0,1.0,1.0,19.032,0.0

@@ -1,0 +1,4 @@
+period,episodes,mean_reward,mean_steps,success_rate,first_epsilon,last_epsilon,mean_illegal_pickups,mean_illegal_dropoffs,mean_illegal_actions,total_illegal_actions
+all,10000,-10.5935,25.8467,0.9891,1.0,0.01,0.3098,0.3033,0.6131,6131
+first_100,100,-543.63,182.76,0.22,1.0,0.36972963764972655,20.33,20.28,40.61,4061
+last_100,100,-1.73,21.92,1.0,0.01,0.01,0.06,0.03,0.09,9

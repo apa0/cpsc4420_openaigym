@@ -1,0 +1,78 @@
+{
+  "original_policy": "results/combined_candidate.npz",
+  "models": [
+    {
+      "rain_noise": 0.0,
+      "model": "results/combined_candidate.npz",
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 42,
+        "rain_noise": 0.0
+      },
+      "sha256": "da3d87c878ff4c4acb2ea57515d8eed8e9af23a702025347d220b7f7f2ad4112"
+    },
+    {
+      "rain_noise": 0.1,
+      "model": "results/rain_experiment/rain_0.1.npz",
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 42,
+        "rain_noise": 0.1
+      },
+      "sha256": "b238223fb599687979f326ee073f66d5e7caf4d3c11af1470f9ab2de9e0b75a8"
+    },
+    {
+      "rain_noise": 0.25,
+      "model": "results/rain_experiment/rain_0.25.npz",
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 42,
+        "rain_noise": 0.25
+      },
+      "sha256": "8d87be54e8a63634bf66d9caba7aa08c82fd93f5a111c135e4bebdd876506662"
+    }
+  ],
+  "noise_levels": [
+    0.0,
+    0.1,
+    0.25
+  ],
+  "noise_definition": "Movement uses intended direction with probability 1-p, each lateral direction with p/2",
+  "environment": "Taxi-v4",
+  "fickle_passenger": false,
+  "training_settings": {
+    "alpha": 0.9,
+    "gamma": 0.99,
+    "epsilon": 1.0,
+    "episodes": 10000,
+    "epsilon_decay": 0.99,
+    "epsilon_min": 0.01,
+    "seed": 42
+  },
+  "evaluation_episodes_per_policy_per_noise": 100,
+  "evaluation_first_seed": 10000,
+  "evaluation_seed_rule": "Reset independently with evaluation_first_seed + episode index for each policy and noise level",
+  "evaluation_epsilon": 0.0,
+  "evaluation_q_updates": false,
+  "reward_std_ddof": 0,
+  "training_plot_window": 100,
+  "zoom_episodes": 2000
+}

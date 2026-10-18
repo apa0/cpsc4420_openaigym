@@ -1,0 +1,11 @@
+rain_noise,policy,model,training_rain_noise,evaluation_episodes,mean_reward,reward_std,success_rate,mean_steps,mean_illegal_pickups,mean_illegal_dropoffs,mean_illegal_actions,total_illegal_actions,truncations,training_seed
+0.0,original_dry_policy,results/combined_candidate.npz,0.0,500,7.714,2.663119223767498,1.0,13.286,0.0,0.0,0.0,0,0,42
+0.0,trained_at_noise_level,results/combined_candidate.npz,0.0,500,7.714,2.663119223767498,1.0,13.286,0.0,0.0,0.0,0,0,42
+0.1,original_dry_policy,results/combined_candidate.npz,0.0,500,5.892,3.5643142397942413,1.0,15.108,0.0,0.0,0.0,0,0,42
+0.1,trained_at_noise_level,results/rain_experiment/rain_0.1.npz,0.1,500,0.96,27.516874822552072,0.982,19.662,0.0,0.0,0.0,0,9,42
+0.1,trained_at_noise_level,results/rain_validation/seed_43/rain_0.1.npz,0.1,500,-18.194,198.7029349657423,0.976,20.888,1.978,0.0,1.978,989,12,43
+0.1,trained_at_noise_level,results/rain_validation/seed_44/rain_0.1.npz,0.1,500,-46.646,89.06384611052904,0.748,62.354,0.0,0.0,0.0,0,126,44
+0.25,original_dry_policy,results/combined_candidate.npz,0.0,500,1.968,5.786793239783153,1.0,19.032,0.0,0.0,0.0,0,0,42
+0.25,trained_at_noise_level,results/rain_experiment/rain_0.25.npz,0.25,500,-14.97,97.8949697379799,0.964,31.614,0.0,0.4,0.4,200,18,42
+0.25,trained_at_noise_level,results/rain_validation/seed_43/rain_0.25.npz,0.25,500,-7.072,37.888557850622924,0.964,27.316,0.0,0.0,0.0,0,18,43
+0.25,trained_at_noise_level,results/rain_validation/seed_44/rain_0.25.npz,0.25,500,-17.6,57.68677491418635,0.91,36.71,0.0,0.0,0.0,0,45,44

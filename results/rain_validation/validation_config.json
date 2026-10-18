@@ -1,0 +1,123 @@
+{
+  "source_experiment": "results/rain_experiment",
+  "original_policy": "results/combined_candidate.npz",
+  "original_policy_sha256": "da3d87c878ff4c4acb2ea57515d8eed8e9af23a702025347d220b7f7f2ad4112",
+  "training_seeds": [
+    42,
+    43,
+    44
+  ],
+  "original_dry_policy_is_fixed": true,
+  "new_training_only_at_nonzero_noise": true,
+  "models": [
+    {
+      "model": "results/rain_experiment/rain_0.1.npz",
+      "training_seed": 42,
+      "rain_noise": 0.1,
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 42,
+        "rain_noise": 0.1
+      },
+      "sha256": "b238223fb599687979f326ee073f66d5e7caf4d3c11af1470f9ab2de9e0b75a8"
+    },
+    {
+      "model": "results/rain_validation/seed_43/rain_0.1.npz",
+      "training_seed": 43,
+      "rain_noise": 0.1,
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 43,
+        "rain_noise": 0.1
+      },
+      "sha256": "a6fdbf19f3d2682ff7c7ae6ebfa537bf76e33f45a60d19da6f81e32e22e528f1"
+    },
+    {
+      "model": "results/rain_validation/seed_44/rain_0.1.npz",
+      "training_seed": 44,
+      "rain_noise": 0.1,
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 44,
+        "rain_noise": 0.1
+      },
+      "sha256": "2d5632a541faa9e75e97f13fd6de5322afa5aee2e2eff3481e4bd911e5195d71"
+    },
+    {
+      "model": "results/rain_experiment/rain_0.25.npz",
+      "training_seed": 42,
+      "rain_noise": 0.25,
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 42,
+        "rain_noise": 0.25
+      },
+      "sha256": "8d87be54e8a63634bf66d9caba7aa08c82fd93f5a111c135e4bebdd876506662"
+    },
+    {
+      "model": "results/rain_validation/seed_43/rain_0.25.npz",
+      "training_seed": 43,
+      "rain_noise": 0.25,
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 43,
+        "rain_noise": 0.25
+      },
+      "sha256": "62d0515533a3e4c1994f9b0313998435f3f1abeccb78978adafb0c3092f52eba"
+    },
+    {
+      "model": "results/rain_validation/seed_44/rain_0.25.npz",
+      "training_seed": 44,
+      "rain_noise": 0.25,
+      "training_config": {
+        "environment": "Taxi-v4",
+        "alpha": 0.9,
+        "gamma": 0.99,
+        "epsilon": 1.0,
+        "episodes": 10000,
+        "epsilon_decay": 0.99,
+        "epsilon_min": 0.01,
+        "seed": 44,
+        "rain_noise": 0.25
+      },
+      "sha256": "a594da7ac7d6110898ea7428e836599e9af969ec8d1fc4b6399988671bebeb1c"
+    }
+  ],
+  "evaluation_episodes_per_model_per_noise": 500,
+  "evaluation_first_seed": 20000,
+  "evaluation_epsilon": 0.0,
+  "evaluation_q_updates": false,
+  "paired_evaluation": "Identical episode seed sequence for every model and noise level",
+  "between_run_std_ddof": 1,
+  "error_bars": "Standard deviation across noisy training seeds, not confidence intervals"
+}
