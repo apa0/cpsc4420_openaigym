@@ -7,7 +7,7 @@ from pathlib import Path
 
 import numpy as np
 
-from analyze_training import moving_average
+from src.tools.analyze_training import moving_average
 
 
 HISTORY_KEYS = (
@@ -24,6 +24,8 @@ def load_runs(paths, parameter="alpha"):
     for path in paths:
         with np.load(path, allow_pickle=False) as archive:
             config = json.loads(archive["config"].item())
+            # Older dry-weather archives predate this optional environment setting.
+            config.setdefault("rain_noise", 0.0)
             history = {key: archive[key].copy() for key in HISTORY_KEYS}
         count = len(history["rewards"])
         if count < 1 or count != config["episodes"]:
@@ -171,7 +173,6 @@ def compare_training(paths, output_dir, window=100, zoom_episodes=2000, zoom_win
         figure.savefig(output_dir / name, dpi=180)
         plt.close(figure)
 
-    # Show auxiliary early-learning trends using the same smoothing and x range.
     figure, axes = plt.subplots(3, 1, figsize=(10, 9), sharex=True)
     for i, run in enumerate(runs):
         for axis, key, scale in zip(axes, ("successes", "steps", "illegal_actions"), (100, 1, 1)):
@@ -192,7 +193,6 @@ def compare_training(paths, output_dir, window=100, zoom_episodes=2000, zoom_win
     figure.savefig(output_dir / "metrics_comparison_early.png", dpi=180)
     plt.close(figure)
 
-    # Separate raw traces on matching axes keep fluctuations visible for each run.
     figure, axes = plt.subplots(len(runs) + 1, 1, figsize=(10, 3 * (len(runs) + 1)), sharex=True)
     tail_episodes = episodes[-stability_count:]
     tail_rewards = [run["history"]["rewards"][-stability_count:] for run in runs]
@@ -219,26 +219,36 @@ def compare_training(paths, output_dir, window=100, zoom_episodes=2000, zoom_win
     return final_rows
 
 
-def main(parameter="alpha"):
-    parser = argparse.ArgumentParser(description=f"Compare Taxi runs with different {parameter} values.")
-    parser.add_argument("models", nargs="+", type=Path, help=f"Training archives with different {parameter} values")
-    parser.add_argument("--output-dir", type=Path, default=Path(f"results/{parameter}_comparison"))
+def main():
+    parser = argparse.ArgumentParser(description="Compare Taxi training runs with one varied parameter.")
+    parser.add_argument("parameter", choices=("alpha", "gamma", "epsilon_decay"))
+    parser.add_argument("models", nargs="+", type=Path, help="Training archives to compare")
+    parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--window", type=int, default=100)
-    parser.add_argument("--zoom-episodes", type=int, default=6000 if parameter == "epsilon_decay" else 2000)
-    parser.add_argument("--zoom-window", type=int, default=100 if parameter == "epsilon_decay" else 25)
+    parser.add_argument("--zoom-episodes", type=int)
+    parser.add_argument("--zoom-window", type=int)
     parser.add_argument("--final-window", type=int, default=100)
     parser.add_argument("--stability-episodes", type=int, default=1000)
     args = parser.parse_args()
+    output_dir = args.output_dir
+    if output_dir is None:
+        output_dir = Path(f"results/{args.parameter}_comparison")
+    zoom_episodes = args.zoom_episodes
+    if zoom_episodes is None:
+        zoom_episodes = 6000 if args.parameter == "epsilon_decay" else 2000
+    zoom_window = args.zoom_window
+    if zoom_window is None:
+        zoom_window = 100 if args.parameter == "epsilon_decay" else 25
     try:
-        rows = compare_training(args.models, args.output_dir, args.window, args.zoom_episodes,
-                                args.zoom_window, args.final_window, args.stability_episodes,
-                                parameter=parameter)
+        rows = compare_training(args.models, output_dir, args.window, zoom_episodes,
+                                zoom_window, args.final_window, args.stability_episodes,
+                                parameter=args.parameter)
     except (OSError, ValueError, KeyError) as error:
         parser.error(str(error))
     for row in rows:
-        print(f"{parameter}={row[parameter]}: mean reward={row['mean_reward']:.2f}, "
+        print(f"{args.parameter}={row[args.parameter]}: mean reward={row['mean_reward']:.2f}, "
               f"reward std={row['reward_std']:.2f}, success={100 * row['success_rate']:.1f}%")
-    print(f"Saved comparison plots and tables to {args.output_dir}")
+    print(f"Saved comparison plots and tables to {output_dir}")
 
 
 if __name__ == "__main__":

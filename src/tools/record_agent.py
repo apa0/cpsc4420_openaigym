@@ -5,14 +5,14 @@ import csv
 import json
 from pathlib import Path
 
-import gymnasium as gym
 from gymnasium.wrappers import RecordVideo
 import numpy as np
 
-from taxi_qlearning import select_action
+from src.tools.taxi_environment import make_taxi
+from src.taxi_qlearning import select_action
 
 
-def record_agent(model, output_dir, episodes=3, seed=43, fps=6):
+def record_agent(model, output_dir, episodes=3, seed=43, fps=6, rain_noise=None):
     """Record complete greedy episodes without changing the learned Q-table."""
     if episodes < 1 or fps < 1 or seed < 0:
         raise ValueError("Episodes and fps must be positive; seed must be nonnegative.")
@@ -23,16 +23,15 @@ def record_agent(model, output_dir, episodes=3, seed=43, fps=6):
         raise ValueError("This recording script expects a Taxi-v4 training run.")
     if q_table.shape != (500, 6) or not np.isfinite(q_table).all():
         raise ValueError("Expected a finite 500 by 6 Taxi Q-table.")
+    if rain_noise is None:
+        rain_noise = config.get("rain_noise", 0.0)
 
     output_dir = Path(output_dir)
     for episode in range(episodes):
         path = output_dir / f"taxi-episode-{episode}.mp4"
         if path.exists():
             raise FileExistsError(f"{path} already exists; choose another --output-dir.")
-    # Match the deterministic environment used for training.
-    env = gym.make(
-        "Taxi-v4", is_rainy=False, fickle_passenger=False, render_mode="rgb_array",
-    )
+    env = make_taxi(rain_noise, render_mode="rgb_array")
     try:
         env = RecordVideo(
             env, video_folder=str(output_dir), episode_trigger=lambda episode: True,
@@ -47,7 +46,6 @@ def record_agent(model, output_dir, episodes=3, seed=43, fps=6):
             illegal_pickups = 0
             illegal_dropoffs = 0
             while True:
-                # Epsilon zero chooses a highest-valued action, with random ties.
                 action = select_action(q_table, state, epsilon=0.0, rng=rng)
                 state, reward, terminated, truncated, _ = env.step(action)
                 if reward == -10:
@@ -71,7 +69,6 @@ def record_agent(model, output_dir, episodes=3, seed=43, fps=6):
                     })
                     break
     finally:
-        # Flush the final episode's recording to disk.
         env.close()
 
     with (output_dir / "episodes.csv").open("w", newline="") as file:
@@ -81,6 +78,7 @@ def record_agent(model, output_dir, episodes=3, seed=43, fps=6):
     (output_dir / "recording_config.json").write_text(json.dumps({
         "model": str(Path(model).resolve()), "training_config": config,
         "episodes": episodes, "seed": seed, "fps": fps, "epsilon": 0.0,
+        "recording_rain_noise": rain_noise,
     }, indent=2) + "\n")
     return records
 
@@ -92,10 +90,12 @@ def main():
     parser.add_argument("--episodes", type=int, default=3, help="Episodes to record (default: 3)")
     parser.add_argument("--seed", type=int, default=43, help="Recording seed (default: 43)")
     parser.add_argument("--fps", type=int, default=6, help="Video playback frames per second (default: 6)")
+    parser.add_argument("--rain-noise", type=float, help="Override the model's training rain level for recording")
     args = parser.parse_args()
     output_dir = args.output_dir or args.model.with_suffix("") / "videos"
     try:
-        records = record_agent(args.model, output_dir, args.episodes, args.seed, args.fps)
+        records = record_agent(args.model, output_dir, args.episodes, args.seed, args.fps,
+                               args.rain_noise)
     except (OSError, ValueError, KeyError) as error:
         parser.error(str(error))
     for record in records:

@@ -6,13 +6,13 @@ import hashlib
 import json
 from pathlib import Path
 
-import gymnasium as gym
 import numpy as np
 
-from taxi_qlearning import select_action
+from src.tools.taxi_environment import make_taxi
+from src.taxi_qlearning import select_action
 
 
-def evaluate_policy(model, episodes=100, seed=10000):
+def evaluate_policy(model, episodes=100, seed=10000, rain_noise=None):
     """Reset with seed + episode for every policy, and keep its Q-table read-only."""
     if episodes < 1 or seed < 0:
         raise ValueError("Episodes must be positive and seed must be nonnegative.")
@@ -26,7 +26,10 @@ def evaluate_policy(model, episodes=100, seed=10000):
         raise ValueError(f"{model}: expected a finite 500 by 6 Q-table.")
     q_table.setflags(write=False)
     records = []
-    env = gym.make("Taxi-v4", is_rainy=False, fickle_passenger=False)
+    # Use training conditions unless the rain robustness experiment overrides them.
+    if rain_noise is None:
+        rain_noise = training_config.get("rain_noise", 0.0)
+    env = make_taxi(rain_noise)
     try:
         for episode in range(episodes):
             episode_seed = seed + episode
@@ -102,6 +105,7 @@ def compare_with_baseline(candidate, baseline, output_dir, episodes=100, seed=10
         provenance.append({
             "agent": model.stem, "model": str(model),
             "sha256": hashlib.sha256(model.read_bytes()).hexdigest(), "training_config": config,
+            "evaluation_rain_noise": config.get("rain_noise", 0.0),
         })
 
     baseline_records = by_agent[baseline.stem]
@@ -128,7 +132,8 @@ def compare_with_baseline(candidate, baseline, output_dir, episodes=100, seed=10
     write_csv(output_dir / "baseline_comparison.csv", paired_rows)
     (output_dir / "evaluation_config.json").write_text(json.dumps({
         "models": provenance, "environment": "Taxi-v4",
-        "environment_settings": {"is_rainy": False, "fickle_passenger": False},
+        "environment_settings": {"fickle_passenger": False},
+        "rain_noise_by_agent": {model["agent"]: model["evaluation_rain_noise"] for model in provenance},
         "episodes_per_agent": episodes, "first_episode_seed": seed,
         "episode_seed_rule": "seed + zero-based episode index; reset independently every episode",
         "tie_breaking": "Random choice among highest-valued actions; RNG reset to episode seed",

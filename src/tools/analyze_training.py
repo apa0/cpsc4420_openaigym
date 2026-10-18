@@ -46,7 +46,6 @@ def export_training(result, config, output_dir, window=100, zoom_episodes=2000, 
                 *(result[key][episode] if has_illegal_counts else "" for key in illegal_keys),
             ])
 
-    # These statistics describe training, which includes exploratory actions.
     with (output_dir / "summary.csv").open("w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([
@@ -76,7 +75,6 @@ def export_training(result, config, output_dir, window=100, zoom_episodes=2000, 
 
     (output_dir / "config.json").write_text(json.dumps(config, indent=2) + "\n")
 
-    # A file-only backend also works when no desktop display is available.
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -96,7 +94,6 @@ def export_training(result, config, output_dir, window=100, zoom_episodes=2000, 
     figure.savefig(output_dir / "reward_curve.png", dpi=180)
     plt.close(figure)
 
-    # Keep every early episode visible while smoothing over a shorter window.
     zoom_count = min(zoom_episodes, count)
     zoom_window = min(zoom_window, zoom_count)
     figure, axis = plt.subplots(figsize=(10, 5))
