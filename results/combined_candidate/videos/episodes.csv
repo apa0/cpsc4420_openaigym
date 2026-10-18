@@ -1,0 +1,4 @@
+episode,video,reward,steps,success,truncated,illegal_pickups,illegal_dropoffs,illegal_actions
+1,taxi-episode-0.mp4,5,16,1,0,0,0,0
+2,taxi-episode-1.mp4,12,9,1,0,0,0,0
+3,taxi-episode-2.mp4,4,17,1,0,0,0,0
