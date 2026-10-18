@@ -1,0 +1,4 @@
+alpha,first_episode,last_episode,episodes,mean_reward,reward_std,success_rate,mean_steps,mean_illegal_pickups,mean_illegal_dropoffs,mean_illegal_actions
+0.1,9901,10000,100,7.09,3.566777256852466,1.0,13.64,0.01,0.02,0.03
+0.5,9901,10000,100,7.32,3.7996841974037783,1.0,13.23,0.02,0.03,0.05
+0.9,9901,10000,100,7.76,2.9193149881436224,1.0,13.06,0.02,0.0,0.02
