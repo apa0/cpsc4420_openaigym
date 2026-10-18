@@ -18,8 +18,8 @@ HISTORY_KEYS = (
 
 def load_runs(paths, parameter="alpha"):
     """Check that only the selected parameter changes, including the same seed."""
-    if parameter not in ("alpha", "gamma"):
-        raise ValueError("Comparison parameter must be alpha or gamma.")
+    if parameter not in ("alpha", "gamma", "epsilon_decay"):
+        raise ValueError("Comparison parameter must be alpha, gamma, or epsilon_decay.")
     runs = []
     for path in paths:
         with np.load(path, allow_pickle=False) as archive:
@@ -76,7 +76,9 @@ def compare_training(paths, output_dir, window=100, zoom_episodes=2000, zoom_win
     if min(window, zoom_episodes, zoom_window, final_window, stability_episodes) < 1:
         raise ValueError("Episode counts and averaging windows must be positive.")
     runs = load_runs(paths, parameter)
-    comparison_name = "learning-rate" if parameter == "alpha" else "discount-factor"
+    comparison_name = {
+        "alpha": "learning-rate", "gamma": "discount-factor", "epsilon_decay": "epsilon-decay",
+    }[parameter]
     count = len(runs[0]["history"]["rewards"])
     window = min(window, count)
     zoom_count = min(zoom_episodes, count)
@@ -107,6 +109,46 @@ def compare_training(paths, output_dir, window=100, zoom_episodes=2000, zoom_win
     colors = plt.get_cmap("tab10").colors
     styles = ("-", "--", "-.", ":")
     episodes = np.arange(1, count + 1)
+
+    if parameter == "epsilon_decay":
+        schedule_rows = []
+        schedule_window = min(window, zoom_count)
+        figure, axes = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+        for i, run in enumerate(runs):
+            config = run["config"]
+            history = run["history"]
+            color = colors[i % len(colors)]
+            style = styles[i % len(styles)]
+            label = f"decay = {config['epsilon_decay']}"
+            floor_indices = np.flatnonzero(history["epsilons"] <= config["epsilon_min"])
+            first_floor = int(floor_indices[0]) if len(floor_indices) else None
+            schedule_rows.append({
+                "epsilon_decay": config["epsilon_decay"],
+                "initial_epsilon": config["epsilon"],
+                "epsilon_min": config["epsilon_min"],
+                "completed_episodes_to_floor": first_floor if first_floor is not None else "",
+                "first_training_episode_at_floor": first_floor + 1 if first_floor is not None else "",
+            })
+            axes[0].plot(episodes[:zoom_count], history["epsilons"][:zoom_count],
+                         label=label, color=color, linestyle=style)
+            axes[1].plot(episodes[schedule_window - 1:zoom_count],
+                         moving_average(history["rewards"][:zoom_count], schedule_window),
+                         label=label, color=color, linestyle=style)
+        axes[0].axhline(runs[0]["config"]["epsilon_min"], color="gray", linewidth=0.8,
+                        linestyle=":", label="Minimum epsilon")
+        axes[0].set(ylabel="Epsilon", ylim=(0, 1))
+        axes[0].legend()
+        axes[1].axhline(0, color="gray", linewidth=0.8)
+        axes[1].set(xlabel="Training episode", ylabel="Mean total reward",
+                    title=f"{schedule_window}-episode moving average")
+        for axis in axes:
+            axis.grid(alpha=0.25)
+        figure.suptitle(f"Taxi: exploration schedule and reward (first {zoom_count:,} episodes)")
+        figure.tight_layout()
+        figure.savefig(output_dir / "exploration_comparison.png", dpi=180)
+        plt.close(figure)
+        write_table(output_dir / "exploration_schedule.csv", schedule_rows)
+
     for name, shown, average_window, title in (
         ("reward_comparison.png", count, window, f"Taxi: {comparison_name} comparison"),
         ("reward_comparison_early.png", zoom_count, zoom_window,
@@ -182,8 +224,8 @@ def main(parameter="alpha"):
     parser.add_argument("models", nargs="+", type=Path, help=f"Training archives with different {parameter} values")
     parser.add_argument("--output-dir", type=Path, default=Path(f"results/{parameter}_comparison"))
     parser.add_argument("--window", type=int, default=100)
-    parser.add_argument("--zoom-episodes", type=int, default=2000)
-    parser.add_argument("--zoom-window", type=int, default=25)
+    parser.add_argument("--zoom-episodes", type=int, default=6000 if parameter == "epsilon_decay" else 2000)
+    parser.add_argument("--zoom-window", type=int, default=100 if parameter == "epsilon_decay" else 25)
     parser.add_argument("--final-window", type=int, default=100)
     parser.add_argument("--stability-episodes", type=int, default=1000)
     args = parser.parse_args()
