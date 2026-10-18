@@ -1,0 +1,17 @@
+{
+  "model": "/Users/angiediaz/CPSC4420/HW_2/cpsc4420_openaigym/src/results/training.npz",
+  "training_config": {
+    "environment": "Taxi-v4",
+    "alpha": 0.1,
+    "gamma": 0.99,
+    "epsilon": 1.0,
+    "episodes": 10000,
+    "epsilon_decay": 0.995,
+    "epsilon_min": 0.01,
+    "seed": 42
+  },
+  "episodes": 3,
+  "seed": 43,
+  "fps": 6,
+  "epsilon": 0.0
+}
